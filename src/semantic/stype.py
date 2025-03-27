@@ -1,8 +1,8 @@
+from __future__ import annotations
 import enum
 
 from . import node
 from llvmlite import ir
-
 
 class TypeNode(node.SemNode):
     def __init__(self, name: str):

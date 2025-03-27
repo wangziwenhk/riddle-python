@@ -1,9 +1,9 @@
 import antlr4
 import os
 
-from semantic.visitor import GramVisitor
 from src.parser.RiddleParser import RiddleParser
 from src.parser.RiddleLexer import RiddleLexer
+from src.semantic.visitor import GramVisitor
 
 if __name__ == '__main__':
     file_path = "test/main.red"

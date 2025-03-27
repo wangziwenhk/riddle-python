@@ -3,7 +3,7 @@ import antlr4
 from src.parser.RiddleParser import RiddleParser
 from src.parser.RiddleParserVisitor import RiddleParserVisitor
 from .program import ProgramNode
-from .literal import IntegerLiteralNode, FloatLiteralNode
+from .literal import IntegerLiteralNode, FloatLiteralNode, BooleanLiteralNode
 
 
 class GramVisitor(RiddleParserVisitor):
@@ -19,3 +19,8 @@ class GramVisitor(RiddleParserVisitor):
 
     def visitFloat(self, ctx: RiddleParser.FloatContext):
         return FloatLiteralNode(ctx.value)
+
+    def visitBoolean(self, ctx):
+        return BooleanLiteralNode(ctx.value)
+    
+    
