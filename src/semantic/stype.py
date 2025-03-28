@@ -4,17 +4,24 @@ import enum
 from . import node
 from llvmlite import ir
 
+
 class TypeNode(node.SemNode):
     def __init__(self, name: str):
         super().__init__()
         self.name = name
         self.llvm_type: ir.Type
 
+    def __str__(self):
+        return 'type: ' + self.name
+
 
 class ClassNode(TypeNode):
     def __init__(self, name: str, members: dict[str, node.SemNode]):
         super().__init__(name)
         self.members = members
+
+    def __str__(self):
+        return 'class: ' + self.name
 
 
 class BaseTypeNode(TypeNode):
@@ -26,6 +33,7 @@ class BaseTypeNode(TypeNode):
         short = enum.auto()
         char = enum.auto()
         bool = enum.auto()
+        void = enum.auto()
 
     def __init__(self, base_type: BaseTypeEnum):
         super().__init__(base_type.name)
@@ -58,3 +66,7 @@ class BaseTypeNode(TypeNode):
     @staticmethod
     def get_bool():
         return BaseTypeNode(BaseTypeNode.BaseTypeEnum.bool)
+
+    @staticmethod
+    def get_void():
+        return BaseTypeNode(BaseTypeNode.BaseTypeEnum.void)

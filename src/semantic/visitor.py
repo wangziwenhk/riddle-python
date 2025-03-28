@@ -1,19 +1,26 @@
+from typing import Optional
+
 import antlr4
 
 from src.parser.RiddleParser import RiddleParser
 from src.parser.RiddleParserVisitor import RiddleParserVisitor
-from .program import ProgramNode
-from .literal import IntegerLiteralNode, FloatLiteralNode, BooleanLiteralNode
+from .node import *
+from .program import *
+from .literal import *
 from .decl import *
 
 
 class GramVisitor(RiddleParserVisitor):
     def visitProgram(self, ctx: RiddleParser.ProgramContext):
-        node = ProgramNode()
+        program = ProgramNode()
         for i in ctx.children:
             if not isinstance(i, antlr4.TerminalNode):
-                node.add(self.visit(i))
-        return node
+                program.add(self.visit(i))
+        return program
+
+    def visitPackStatement(self, ctx: RiddleParser.PackStatementContext):
+        package = PackageNode(ctx.packName.getText())
+        return package
 
     def visitInteger(self, ctx: RiddleParser.IntegerContext):
         return IntegerLiteralNode(ctx.value)
@@ -23,20 +30,38 @@ class GramVisitor(RiddleParserVisitor):
 
     def visitBoolean(self, ctx: RiddleParser.BooleanContext):
         return BooleanLiteralNode(ctx.value)
-    
+
     def visitVarDefineStatement(self, ctx: RiddleParser.VarDefineStatementContext):
         name = ctx.name.getText()
-        value:expr.ExprNode | None = None
-        type:stype.TypeNode | None = None
+        value: Optional[expr.ExprNode] = None
+        typ: Optional[stype.TypeNode] = None
         if ctx.value:
             value = self.visit(ctx.value)
         if ctx.type_:
-            type = self.visit(ctx.type_)
+            typ = self.visit(ctx.type_)
         elif ctx.value:
-            type = value.type
-        
-        return VarDecl(name,type,value)
-    
+            typ = value.type
+
+        return VarDeclNode(name, typ, value)
+
     def visitFuncDefine(self, ctx: RiddleParser.FuncDefineContext):
-        name =  ctx.funcName.getText()
-        return super().visitFuncDefine(ctx)
+        name = ctx.funcName.getText()
+        typ: Optional[stype.TypeNode]
+
+        if ctx.returnType:
+            typ = self.visit(ctx.returnType)
+        else:
+            typ = stype.BaseTypeNode.get_void()
+
+        body = self.visit(ctx.body)
+
+        func_decl = FuncDeclNode(name, typ, [], body)
+        return func_decl
+
+    def visitBodyExpr(self, ctx: RiddleParser.BodyExprContext):
+        block: list[SemNode] = []
+        for i in ctx.children:
+            if not isinstance(i, antlr4.TerminalNode):
+                block.append(self.visit(i))
+
+        return block

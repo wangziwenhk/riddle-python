@@ -1,4 +1,5 @@
 from . import node
+from ..gen.visitor import GenVisitor
 
 
 class ProgramNode(node.SemNode):
@@ -14,3 +15,12 @@ class ProgramNode(node.SemNode):
 
     def __iter__(self):
         return self._commands.__iter__()
+
+    def __str__(self):
+        temp = []
+        for command in self._commands:
+            temp.append(str(command))
+        return str(temp)
+
+    def accept(self, visitor):
+        return visitor.visit_program(self)

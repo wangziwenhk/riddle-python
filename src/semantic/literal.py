@@ -7,14 +7,23 @@ class IntegerLiteralNode(expr.ExprNode):
         super().__init__(stype.BaseTypeNode.get_int())
         self.value = value
 
+    def __str__(self):
+        return 'literal: ' + str(self.value)
+
 
 class FloatLiteralNode(expr.ExprNode):
     def __init__(self, value: float):
         super().__init__(stype.BaseTypeNode.get_float())
         self.value = value
 
+    def __str__(self):
+        return 'literal: ' + str(self.value)
+
+
 class BooleanLiteralNode(expr.ExprNode):
-    def __init__(self, value:bool):
+    def __init__(self, value: bool):
         super().__init__(stype.BaseTypeNode.get_bool())
         self.value = value
 
+    def __str__(self):
+        return 'literal: ' + str(self.value)
