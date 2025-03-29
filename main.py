@@ -4,6 +4,7 @@ import os
 from src.parser.RiddleParser import RiddleParser
 from src.parser.RiddleLexer import RiddleLexer
 from src.semantic.visitor import GramVisitor
+from src.gen.visitor import GenVisitor
 
 if __name__ == '__main__':
     file_path = "test/main.red"
@@ -15,4 +16,6 @@ if __name__ == '__main__':
 
     visitor = GramVisitor()
     result = visitor.visit(tree)
-    print(result)
+    gen = GenVisitor()
+    gen.visit(result)
+    print(gen.module)

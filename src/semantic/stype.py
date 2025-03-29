@@ -6,6 +6,9 @@ from llvmlite import ir
 
 
 class TypeNode(node.SemNode):
+    def accept(self, visitor):
+        return visitor.visit_type(self)
+
     def __init__(self, name: str):
         super().__init__()
         self.name = name
@@ -16,6 +19,9 @@ class TypeNode(node.SemNode):
 
 
 class ClassNode(TypeNode):
+    def accept(self, visitor):
+        return visitor.visit_class(self)
+
     def __init__(self, name: str, members: dict[str, node.SemNode]):
         super().__init__(name)
         self.members = members
@@ -35,9 +41,17 @@ class BaseTypeNode(TypeNode):
         bool = enum.auto()
         void = enum.auto()
 
-    def __init__(self, base_type: BaseTypeEnum):
-        super().__init__(base_type.name)
-        self.base_type = base_type
+    def __init__(self, base_type: BaseTypeEnum | str):
+        self.base_type: BaseTypeNode.BaseTypeEnum
+        if isinstance(base_type, str):
+            super().__init__(base_type)
+            try:
+                self.base_type = BaseTypeNode.BaseTypeEnum[base_type]
+            except KeyError:
+                raise ValueError(f'invalid base type \"{base_type}\"')
+        elif isinstance(base_type, self.BaseTypeEnum):
+            super().__init__(base_type.name)
+            self.base_type = base_type
 
     @staticmethod
     def get_int():
@@ -70,3 +84,6 @@ class BaseTypeNode(TypeNode):
     @staticmethod
     def get_void():
         return BaseTypeNode(BaseTypeNode.BaseTypeEnum.void)
+
+    def accept(self, visitor):
+        return visitor.visit_type(self)

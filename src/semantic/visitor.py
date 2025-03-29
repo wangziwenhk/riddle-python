@@ -8,6 +8,7 @@ from .node import *
 from .program import *
 from .literal import *
 from .decl import *
+from .stype import BaseTypeNode, TypeNode
 
 
 class GramVisitor(RiddleParserVisitor):
@@ -65,3 +66,10 @@ class GramVisitor(RiddleParserVisitor):
                 block.append(self.visit(i))
 
         return block
+
+    def visitBaseType(self, ctx:RiddleParser.BaseTypeContext):
+        name = ctx.name.getText()
+        if name in BaseTypeNode.BaseTypeEnum.__members__:
+            return BaseTypeNode(name)
+        else:
+            return TypeNode(name)

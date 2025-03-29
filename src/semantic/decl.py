@@ -1,15 +1,30 @@
-from __future__ import annotations
-from . import node
-from . import stype
-from . import expr
+from typing import Optional
+from .node import *
+from .stype import *
+from .expr import *
+import llvmlite.ir as ir
 
 
-class VarDeclNode(node.SemNode):
-    def __init__(self, name: str, typ: stype.TypeNode, value: expr.ExprNode):
+class AllocaNode(SemNode):
+    def __init__(self, typ: TypeNode):
+        super().__init__()
+        self.type = typ
+        self.alloca: Optional[ir.AllocaInstr] = None
+
+    def accept(self, visitor):
+        return visitor.visit_alloca(self)
+
+    def set_alloca(self, alloca: ir.AllocaInstr) -> None:
+        self.alloca = alloca
+
+
+class VarDeclNode(SemNode):
+    def __init__(self, name: str, typ: TypeNode, value: ExprNode):
         super().__init__()
         self.name = name
         self.type = typ
         self.value = value
+        self.alloca_node = AllocaNode(typ)
 
     def __str__(self):
         return f"varDecl:[name: {self.name}, {self.type}, {self.value}]"
@@ -18,8 +33,8 @@ class VarDeclNode(node.SemNode):
         return visitor.visit_var_decl(self)
 
 
-class FuncDeclNode(node.SemNode):
-    def __init__(self, name: str, typ: stype.TypeNode, param: list, body: list | None):
+class FuncDeclNode(SemNode):
+    def __init__(self, name: str, typ: TypeNode, param: list, body: Optional[list]):
         super().__init__()
         self.name = name
         self.type = typ

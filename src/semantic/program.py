@@ -1,6 +1,4 @@
 from . import node
-from ..gen.visitor import GenVisitor
-
 
 class ProgramNode(node.SemNode):
     def __init__(self):
