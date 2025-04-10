@@ -63,7 +63,10 @@ class GramVisitor(RiddleParserVisitor):
         block: list[SemNode] = []
         for i in ctx.children:
             if not isinstance(i, antlr4.TerminalNode):
-                block.append(self.visit(i))
+                result = self.visit(i);
+                if result is None:
+                    continue
+                block.append(result)
 
         return block
 
@@ -73,3 +76,6 @@ class GramVisitor(RiddleParserVisitor):
             return BaseTypeNode(name)
         else:
             return TypeNode(name)
+    
+    def visitStatement_ed(self, ctx):
+        return self.visit(ctx.children[0])

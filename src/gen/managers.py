@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 import llvmlite.ir as ir
 
@@ -21,7 +21,7 @@ class Variable(Object):
 
 
 class Function(Object):
-    def __init__(self, name, params, return_type, body: list[SemNode]):
+    def __init__(self, name, params, return_type, body: List[SemNode]):
         super().__init__(name)
         self.params = params
         self.return_type = return_type

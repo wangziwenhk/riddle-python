@@ -7,7 +7,7 @@ from src.semantic.visitor import GramVisitor
 from src.gen.visitor import GenVisitor
 
 if __name__ == '__main__':
-    file_path = "test/main.red"
+    file_path = "/home/thtf/Code/riddle-python/test/main.red"
     input_stream = antlr4.FileStream(file_path)
     lexer = RiddleLexer(input_stream)
     stream = antlr4.CommonTokenStream(lexer)

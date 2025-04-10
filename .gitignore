@@ -5,3 +5,7 @@ test/
 src/__pycacahe__
 src/semantic/__pycacahe__
 src/parser/__pycacahe__
+__pycacahe__/
+*.pyc
+*.pyo
+*.pyd
