@@ -2,7 +2,7 @@ from typing import Optional, List
 
 import llvmlite.ir as ir
 
-from src.semantic.node import SemNode
+from src.semantic.nodes.node import SemNode
 
 
 class Object:

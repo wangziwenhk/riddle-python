@@ -1,4 +1,4 @@
-from . import expr
+from ..nodes import expr
 from . import stype
 
 

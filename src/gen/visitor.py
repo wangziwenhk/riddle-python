@@ -1,10 +1,10 @@
 import llvmlite.ir as ir
 
-from ..semantic.node import *
-from ..semantic.program import *
-from ..semantic.decl import *
-from ..semantic.stype import *
-from .managers import *
+from ..semantic.nodes.node import *
+from ..semantic.nodes.program import *
+from ..semantic.nodes.decl import *
+from ..semantic.nodes.stype import *
+from ..semantic.managers import *
 
 
 class GenVisitor:
